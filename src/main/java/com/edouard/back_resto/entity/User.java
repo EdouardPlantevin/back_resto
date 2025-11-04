@@ -38,5 +38,11 @@ public class User {
         this.squads.add(squad);
         squad.getUsers().add(this);
     }
+
+    public void removeSquad(Squad squad) {
+        this.squads.remove(squad);
+        squad.getUsers().remove(this);
+    }
+
 }
 

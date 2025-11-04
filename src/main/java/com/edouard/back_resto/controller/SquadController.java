@@ -11,10 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Squad")
 @RestController
@@ -28,12 +25,29 @@ public class SquadController {
     @PostMapping("/create")
     @Operation(security = {@SecurityRequirement(name = "bearerAuth")})
     public ResponseEntity<MessageResponse> createSquad(@Valid @RequestBody SquadRequest squadRequest) {
-        try {
-            squadService.createSquad(squadRequest);
-            return ResponseEntity.ok(new MessageResponse("Squad created successfully"));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+        squadService.createSquad(squadRequest);
+        return ResponseEntity.ok(new MessageResponse("Squad created successfully"));
+    }
+
+    @PostMapping("/join")
+    @Operation(security = {@SecurityRequirement(name = "bearerAuth")})
+    public ResponseEntity<MessageResponse> joinSquad(Long squadId) {
+        squadService.joinSquad(squadId);
+        return ResponseEntity.ok(new MessageResponse("Squad joined successfully"));
+    }
+
+    @PostMapping("/leave")
+    @Operation(security = {@SecurityRequirement(name = "bearerAuth")})
+    public ResponseEntity<MessageResponse> leaveSquad(Long squadId) {
+        squadService.leaveSquad(squadId);
+        return ResponseEntity.ok(new MessageResponse("Squad leaved successfully"));
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(security = {@SecurityRequirement(name = "bearerAuth")})
+    public ResponseEntity<MessageResponse> deleteSquad(@PathVariable Long id) {
+        squadService.deleteSquad(id);
+        return ResponseEntity.ok(new MessageResponse("Squad deleted successfully"));
     }
 
 }

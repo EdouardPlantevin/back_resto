@@ -22,6 +22,10 @@ public class Squad {
     private String name;
     private Date createdAt;
 
+    @ManyToOne
+    @JoinColumn(name = "leader_id")
+    private User leader;
+
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "user_squads",
