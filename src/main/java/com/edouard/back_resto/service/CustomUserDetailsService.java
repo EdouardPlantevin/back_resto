@@ -1,7 +1,7 @@
-package com.edouard.jwt.service;
+package com.edouard.back_resto.service;
 
-import com.edouard.jwt.entity.User;
-import com.edouard.jwt.repository.UserRepository;
+import com.edouard.back_resto.entity.User;
+import com.edouard.back_resto.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

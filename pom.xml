@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.edouard</groupId>
-	<artifactId>jwt</artifactId>
+	<artifactId>resto</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>jwt</name>
-	<description>jwt</description>
+	<name>resto</name>
+	<description>backend application resto</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -87,6 +87,18 @@
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-jackson</artifactId>
 			<version>0.13.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.19.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.8.13</version>
 		</dependency>
 	</dependencies>
 

@@ -1,7 +1,7 @@
-package com.edouard.jwt.filter;
+package com.edouard.back_resto.filter;
 
-import com.edouard.jwt.configuration.JwtUtils;
-import com.edouard.jwt.service.CustomUserDetailsService;
+import com.edouard.back_resto.configuration.JwtUtils;
+import com.edouard.back_resto.service.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

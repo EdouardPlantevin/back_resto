@@ -1,6 +1,6 @@
-package com.edouard.jwt.repository;
+package com.edouard.back_resto.repository;
 
-import com.edouard.jwt.entity.User;
+import com.edouard.back_resto.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

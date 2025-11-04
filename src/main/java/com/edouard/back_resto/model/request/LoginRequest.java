@@ -1,4 +1,4 @@
-package com.edouard.jwt.model.request;
+package com.edouard.back_resto.model.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

@@ -1,12 +1,12 @@
-package com.edouard.jwt.service;
+package com.edouard.back_resto.service;
 
-import com.edouard.jwt.configuration.JwtUtils;
-import com.edouard.jwt.entity.RefreshToken;
-import com.edouard.jwt.entity.User;
-import com.edouard.jwt.model.request.LoginRequest;
-import com.edouard.jwt.model.request.RegisterRequest;
-import com.edouard.jwt.model.response.AuthResponse;
-import com.edouard.jwt.repository.UserRepository;
+import com.edouard.back_resto.configuration.JwtUtils;
+import com.edouard.back_resto.entity.RefreshToken;
+import com.edouard.back_resto.entity.User;
+import com.edouard.back_resto.model.request.LoginRequest;
+import com.edouard.back_resto.model.request.RegisterRequest;
+import com.edouard.back_resto.model.response.AuthResponse;
+import com.edouard.back_resto.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,6 +16,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor

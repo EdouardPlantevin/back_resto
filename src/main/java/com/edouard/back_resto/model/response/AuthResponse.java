@@ -1,4 +1,4 @@
-package com.edouard.jwt.model.response;
+package com.edouard.back_resto.model.response;
 
 public record AuthResponse(
         String accessToken,

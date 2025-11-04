@@ -1,4 +1,4 @@
-package com.edouard.jwt.entity;
+package com.edouard.back_resto.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

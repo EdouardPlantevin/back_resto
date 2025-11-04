@@ -1,12 +1,13 @@
-package com.edouard.jwt.controller;
+package com.edouard.back_resto.controller;
 
-import com.edouard.jwt.entity.User;
-import com.edouard.jwt.model.request.LoginRequest;
-import com.edouard.jwt.model.request.RefreshTokenRequest;
-import com.edouard.jwt.model.request.RegisterRequest;
-import com.edouard.jwt.model.response.AuthResponse;
-import com.edouard.jwt.model.response.MessageResponse;
-import com.edouard.jwt.service.AuthService;
+import com.edouard.back_resto.entity.User;
+import com.edouard.back_resto.model.request.LoginRequest;
+import com.edouard.back_resto.model.request.RefreshTokenRequest;
+import com.edouard.back_resto.model.request.RegisterRequest;
+import com.edouard.back_resto.model.response.AuthResponse;
+import com.edouard.back_resto.model.response.MessageResponse;
+import com.edouard.back_resto.service.AuthService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Auth")
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor

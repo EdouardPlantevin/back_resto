@@ -1,4 +1,4 @@
-package com.edouard.jwt.configuration;
+package com.edouard.back_resto.configuration;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

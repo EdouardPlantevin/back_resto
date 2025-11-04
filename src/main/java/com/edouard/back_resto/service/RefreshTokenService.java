@@ -1,10 +1,10 @@
-package com.edouard.jwt.service;
+package com.edouard.back_resto.service;
 
-import com.edouard.jwt.configuration.JwtUtils;
-import com.edouard.jwt.entity.RefreshToken;
-import com.edouard.jwt.entity.User;
-import com.edouard.jwt.repository.RefreshTokenRepository;
-import com.edouard.jwt.repository.UserRepository;
+import com.edouard.back_resto.configuration.JwtUtils;
+import com.edouard.back_resto.entity.RefreshToken;
+import com.edouard.back_resto.entity.User;
+import com.edouard.back_resto.repository.RefreshTokenRepository;
+import com.edouard.back_resto.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,11 +54,10 @@ public class RefreshTokenService {
      * la méthode supprime le token et lève une exception runtime.
      *
      * @param token le refresh token à vérifier
-     * @return l'entité {@link RefreshToken} si le token est valide
      * @throws RuntimeException si le token n'est pas trouvé, est expiré, est révoqué ou est invalide
      */
     @Transactional
-    public RefreshToken verifyRefreshToken(String token) {
+    public void verifyRefreshToken(String token) {
         RefreshToken refreshToken = refreshTokenRepository.findByToken(token)
                 .orElseThrow(() -> new RuntimeException("Refresh token not found"));
 
@@ -71,8 +70,6 @@ public class RefreshTokenService {
             refreshTokenRepository.delete(refreshToken);
             throw new RuntimeException("Invalid refresh token");
         }
-
-        return refreshToken;
     }
 
     /**

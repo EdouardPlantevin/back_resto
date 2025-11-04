@@ -1,7 +1,7 @@
-package com.edouard.jwt.configuration;
+package com.edouard.back_resto.configuration;
 
-import com.edouard.jwt.filter.JwtFilter;
-import com.edouard.jwt.service.CustomUserDetailsService;
+import com.edouard.back_resto.filter.JwtFilter;
+import com.edouard.back_resto.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,6 +41,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/auth/*").permitAll()
+                                .requestMatchers("/swagger-ui/**").permitAll()
+                                .requestMatchers("/v3/api-docs/**").permitAll()
                                 .anyRequest().authenticated())
                 .addFilterBefore(new JwtFilter(customUserDetailsService, jwtUtils), UsernamePasswordAuthenticationFilter.class)
                 .build();
