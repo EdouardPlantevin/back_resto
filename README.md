@@ -30,7 +30,8 @@ Modifiez le fichier `.env` avec vos valeurs :
 - `DB_USERNAME` : Utilisateur MySQL
 - `DB_PASSWORD` : Mot de passe MySQL
 - `JWT_SECRET` : Clé secrète générée à l'étape 1
-- `JWT_EXPIRATION_SECOND` : Durée de validité du token (en secondes, ex: 86400 pour 24 heures)
+- `JWT_ACCESS_TOKEN_EXPIRATION` : Durée de validité de l'access token (en secondes, ex: 900 pour 15 minutes)
+- `JWT_REFRESH_TOKEN_EXPIRATION` : Durée de validité du refresh token (en secondes, ex: 604800 pour 7 jours)
 
 ## 🔧 Personnaliser le nom du projet
 
@@ -60,6 +61,31 @@ Renommez `JwtApplication.java` si nécessaire et mettez à jour la référence d
 ```
 
 L'application sera accessible sur `http://localhost:8080`
+
+## 🔐 API Endpoints
+
+### Authentification
+
+- `POST /api/auth/register` - Inscription d'un nouvel utilisateur
+- `POST /api/auth/login` - Connexion (retourne access token + refresh token)
+- `POST /api/auth/refresh` - Obtenir un nouvel access token avec le refresh token
+- `POST /api/auth/logout` - Déconnexion (révoque le refresh token)
+
+### Format de réponse Login/Refresh
+
+```json
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "tokenType": "Bearer",
+  "expiresIn": 900
+}
+```
+
+### Utilisation des tokens
+
+- **Access Token** : À inclure dans le header `Authorization: Bearer <accessToken>` pour les requêtes authentifiées
+- **Refresh Token** : À utiliser avec l'endpoint `/api/auth/refresh` pour obtenir un nouvel access token
 
 ## 📦 Prérequis
 

@@ -21,24 +21,54 @@ public class JwtUtils {
     @Value("${app.secret-key}")
     private String secretKey;
 
-    @Value("${app.expiration-time}")
-    private long expirationTime;
+    @Value("${app.access-token-expiration}")
+    private long accessTokenExpiration;
 
+    @Value("${app.refresh-token-expiration}")
+    private long refreshTokenExpiration;
+
+    private static final String TOKEN_TYPE_CLAIM = "type";
 
     // > PUBLIC
-    public String generateToken(String email) {
+    public String generateAccessToken(String email) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, email);
+        claims.put(TOKEN_TYPE_CLAIM, "access");
+        return createToken(claims, email, accessTokenExpiration);
+    }
+
+    public String generateRefreshToken(String email) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(TOKEN_TYPE_CLAIM, "refresh");
+        return createToken(claims, email, refreshTokenExpiration);
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
         String email = extractEmail(token);
-
         return userDetails.getUsername().equals(email) && !isTokenExpired(token);
+    }
+
+    public Boolean validateToken(String token) {
+        return !isTokenExpired(token);
     }
 
     public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    public String extractTokenType(String token) {
+        return extractClaim(token, claims -> claims.get(TOKEN_TYPE_CLAIM, String.class));
+    }
+
+    public boolean isAccessToken(String token) {
+        return "access".equals(extractTokenType(token));
+    }
+
+    public boolean isRefreshToken(String token) {
+        return "refresh".equals(extractTokenType(token));
+    }
+
+    public long getAccessTokenExpiration() {
+        return accessTokenExpiration;
     }
     // < PUBLIC
 
@@ -68,12 +98,12 @@ public class JwtUtils {
                 .getPayload();
     }
 
-    private String createToken(Map<String, Object> claims, String email) {
+    private String createToken(Map<String, Object> claims, String email, long expirationSeconds) {
         return Jwts.builder()
                 .claims(claims)
                 .subject(email)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expirationTime * 1000))
+                .expiration(new Date(System.currentTimeMillis() + expirationSeconds * 1000))
                 .signWith(getSignInKey())
                 .compact();
     }

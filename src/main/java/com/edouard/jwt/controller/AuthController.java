@@ -1,23 +1,20 @@
 package com.edouard.jwt.controller;
 
-import com.edouard.jwt.configuration.JwtUtils;
 import com.edouard.jwt.entity.User;
-import com.edouard.jwt.repository.UserRepository;
+import com.edouard.jwt.model.request.LoginRequest;
+import com.edouard.jwt.model.request.RefreshTokenRequest;
+import com.edouard.jwt.model.request.RegisterRequest;
+import com.edouard.jwt.model.response.AuthResponse;
+import com.edouard.jwt.model.response.MessageResponse;
+import com.edouard.jwt.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -25,39 +22,49 @@ import java.util.Map;
 @Slf4j
 public class AuthController {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtUtils jwtUtils;
-    private final AuthenticationManager authenticationManager;
+    private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User user) {
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-            return ResponseEntity.badRequest().body("Email is already taken!");
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
+        try {
+            User user = authService.register(request);
+            return ResponseEntity.ok(user);
+        } catch (RuntimeException e) {
+            log.error("Registration error: {}", e.getMessage());
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
-
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return ResponseEntity.ok(userRepository.save(user));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User user) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
         try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
-
-            if (authentication.isAuthenticated()) {
-                Map<String, Object> authData = new HashMap<>();
-                authData.put("token", jwtUtils.generateToken(user.getEmail()));
-                authData.put("type", "Bearer");
-                return ResponseEntity.ok(authData);
-            }
-
-            return ResponseEntity.badRequest().body("Invalid username or password");
-        } catch (AuthenticationException e) {
-            log.error("Authentication error: {}", e.getMessage());
-            return ResponseEntity.badRequest().body("Invalid username or password");
+            AuthResponse response = authService.login(request);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            log.error("Login error: {}", e.getMessage());
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
     }
 
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshToken(@Valid @RequestBody RefreshTokenRequest request) {
+        try {
+            AuthResponse response = authService.refreshToken(request.refreshToken());
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            log.error("Refresh token error: {}", e.getMessage());
+            return ResponseEntity.badRequest().body(new MessageResponse("Invalid or expired refresh token"));
+        }
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@Valid @RequestBody RefreshTokenRequest request) {
+        try {
+            authService.logout(request.refreshToken());
+            return ResponseEntity.ok(new MessageResponse("Logout successful"));
+        } catch (Exception e) {
+            log.error("Logout error: {}", e.getMessage());
+            return ResponseEntity.badRequest().body(new MessageResponse("Logout failed"));
+        }
+    }
 }
