@@ -31,8 +31,8 @@ public class SquadController {
 
     @PostMapping("/join")
     @Operation(security = {@SecurityRequirement(name = "bearerAuth")})
-    public ResponseEntity<MessageResponse> joinSquad(Long squadId) {
-        squadService.joinSquad(squadId);
+    public ResponseEntity<MessageResponse> joinSquad(String codeJoin) {
+        squadService.joinSquad(codeJoin);
         return ResponseEntity.ok(new MessageResponse("Squad joined successfully"));
     }
 

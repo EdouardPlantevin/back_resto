@@ -21,6 +21,7 @@ public class Squad {
 
     private String name;
     private Date createdAt;
+    private String codeJoin;
 
     @ManyToOne
     @JoinColumn(name = "leader_id")
