@@ -5,10 +5,13 @@ import com.edouard.back_resto.entity.Criteria;
 import com.edouard.back_resto.entity.Rating;
 import com.edouard.back_resto.entity.Restaurant;
 import com.edouard.back_resto.entity.User;
+import com.edouard.back_resto.exception.RestaurantNotFoundException;
+import com.edouard.back_resto.exception.UserUnauthorizeException;
 import com.edouard.back_resto.model.request.RatingRequest;
 import com.edouard.back_resto.repository.CriteriaRepository;
 import com.edouard.back_resto.repository.RatingRepository;
 import com.edouard.back_resto.repository.RestaurantRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,18 +25,18 @@ public class RatingService {
     private final CriteriaRepository criteriaRepository;
 
 
-    public String create(RatingRequest ratingRequest) {
+    public void create(RatingRequest ratingRequest) {
 
         User user = currentUserService.getCurrentUser();
         Restaurant restaurant = restaurantRepository.findById(ratingRequest.restaurantId())
-                .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+                .orElseThrow(() -> new RestaurantNotFoundException(ratingRequest.restaurantId()));
 
         if (!restaurant.getSquad().getUsers().contains(user)) {
-            throw new RuntimeException("User can't rate a restaurant not in his squad");
+            throw new UserUnauthorizeException("Noter un restaurant qui n'appartient pas à l'une de ces squads");
         }
 
         Criteria criteria = criteriaRepository.findById(ratingRequest.criteriaId())
-                .orElseThrow(() -> new RuntimeException("Criteria not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Criteria with id " + ratingRequest.criteriaId() + " not found"));
 
         try {
             Rating rating = new Rating();

@@ -32,8 +32,8 @@ public class RestaurantController {
 
     @PostMapping("/create")
     @Operation(security = {@SecurityRequirement(name = "bearerAuth")})
-    public void create(Long squadId, @Valid @RequestBody RestaurantRequest restaurantRequest) {
-        restaurantService.create(restaurantRequest, squadId);
+    public void create(@Valid @RequestBody RestaurantRequest restaurantRequest) {
+        restaurantService.create(restaurantRequest);
     }
 
     @DeleteMapping("/{id}")

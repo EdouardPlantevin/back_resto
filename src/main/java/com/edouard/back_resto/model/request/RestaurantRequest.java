@@ -8,6 +8,9 @@ public record RestaurantRequest(
 
         String address,
         String description,
-        String phone
+        String phone,
+
+        @NotBlank
+        Long squadId
 ) {
 }

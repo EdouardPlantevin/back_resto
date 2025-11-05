@@ -36,9 +36,9 @@ public class RestaurantService {
                 .toList();
     }
 
-    public void create(RestaurantRequest restaurantRequest, Long squadId) {
+    public void create(RestaurantRequest restaurantRequest) {
 
-        Squad squad = squadRepository.findById(squadId).orElseThrow(() -> new RuntimeException("Squad not found"));
+        Squad squad = squadRepository.findById(restaurantRequest.squadId()).orElseThrow(() -> new RuntimeException("Squad not found"));
 
         if (restaurantRepository.findByNameAndSquad(restaurantRequest.name(), squad).isPresent()) {
             throw new RuntimeException("Restaurant already exists");
