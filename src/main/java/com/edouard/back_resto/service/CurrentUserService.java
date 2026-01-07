@@ -1,9 +1,9 @@
 package com.edouard.back_resto.service;
 
 import com.edouard.back_resto.entity.User;
+import com.edouard.back_resto.exception.UserNotAuthenticatedException;
 import com.edouard.back_resto.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ public class CurrentUserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         
         if (authentication == null || !authentication.isAuthenticated()) {
-            throw new RuntimeException("No authenticated user found");
+            throw new UserNotAuthenticatedException();
         }
         
         String email = authentication.getName();
@@ -48,7 +48,7 @@ public class CurrentUserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         
         if (authentication == null || !authentication.isAuthenticated()) {
-            throw new RuntimeException("No authenticated user found");
+            throw new UserNotAuthenticatedException();
         }
         
         return authentication.getName();

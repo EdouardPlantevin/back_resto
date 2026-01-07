@@ -162,7 +162,7 @@ class RefreshTokenServiceTest {
         RuntimeException exception = assertThrows(RuntimeException.class, 
             () -> refreshTokenService.verifyRefreshToken(token));
         
-        assertEquals("Invalid refresh token", exception.getMessage());
+        assertEquals("Refresh token is expired or revoked", exception.getMessage());
         verify(refreshTokenRepository, times(1)).delete(refreshToken);
     }
 
@@ -179,7 +179,7 @@ class RefreshTokenServiceTest {
         RuntimeException exception = assertThrows(RuntimeException.class, 
             () -> refreshTokenService.verifyRefreshToken(token));
         
-        assertEquals("Invalid refresh token", exception.getMessage());
+        assertEquals("Refresh token is expired or revoked", exception.getMessage());
         verify(refreshTokenRepository, times(1)).delete(refreshToken);
     }
 

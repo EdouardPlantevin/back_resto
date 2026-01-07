@@ -1,10 +1,5 @@
 package com.edouard.back_resto.security;
 
-import com.edouard.back_resto.configuration.JwtUtils;
-import com.edouard.back_resto.controller.AuthController;
-import com.edouard.back_resto.controller.SquadController;
-import com.edouard.back_resto.model.dto.RestaurantDto;
-import com.edouard.back_resto.service.CustomUserDetailsService;
 import com.edouard.back_resto.service.RestaurantService;
 import com.edouard.back_resto.model.request.RegisterRequest;
 import com.edouard.back_resto.model.request.LoginRequest;
@@ -14,9 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -39,7 +34,7 @@ class SecurityConfigTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @MockBean
+    @MockitoBean
     private RestaurantService restaurantService;
 
     @Test

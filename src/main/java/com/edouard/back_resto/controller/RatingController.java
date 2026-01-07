@@ -1,7 +1,6 @@
 package com.edouard.back_resto.controller;
 
 import com.edouard.back_resto.model.request.RatingRequest;
-import com.edouard.back_resto.model.response.MessageResponse;
 import com.edouard.back_resto.service.RatingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;

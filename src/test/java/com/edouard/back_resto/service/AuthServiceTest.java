@@ -147,7 +147,7 @@ class AuthServiceTest {
         RuntimeException exception = assertThrows(RuntimeException.class, 
             () -> authService.login(loginRequest));
         
-        assertEquals("Invalid username or password", exception.getMessage());
+        assertEquals("Invalid username or password : test@example.com", exception.getMessage());
         verify(jwtUtils, never()).generateAccessToken(anyString());
         verify(refreshTokenService, never()).createRefreshToken(anyString());
     }
@@ -165,7 +165,7 @@ class AuthServiceTest {
         RuntimeException exception = assertThrows(RuntimeException.class, 
             () -> authService.login(loginRequest));
         
-        assertEquals("Invalid username or password", exception.getMessage());
+        assertEquals("Invalid username or password : test@example.com", exception.getMessage());
         verify(jwtUtils, never()).generateAccessToken(anyString());
     }
 

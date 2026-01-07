@@ -3,6 +3,8 @@ package com.edouard.back_resto.service;
 import com.edouard.back_resto.configuration.JwtUtils;
 import com.edouard.back_resto.entity.RefreshToken;
 import com.edouard.back_resto.entity.User;
+import com.edouard.back_resto.exception.UserAlreadyExistsException;
+import com.edouard.back_resto.exception.UserInvalidException;
 import com.edouard.back_resto.model.request.LoginRequest;
 import com.edouard.back_resto.model.request.RegisterRequest;
 import com.edouard.back_resto.model.response.AuthResponse;
@@ -43,7 +45,7 @@ public class AuthService {
     @Transactional
     public User register(RegisterRequest request) {
         if (userRepository.findByEmail(request.email()).isPresent()) {
-            throw new RuntimeException("Email is already taken!");
+            throw new UserAlreadyExistsException("Email is already taken!");
         }
 
         User user = new User();
@@ -71,7 +73,7 @@ public class AuthService {
                     new UsernamePasswordAuthenticationToken(request.email(), request.password()));
 
             if (!authentication.isAuthenticated()) {
-                throw new RuntimeException("Invalid username or password");
+                throw new UserInvalidException(request.email());
             }
 
             String email = request.email();
@@ -87,7 +89,7 @@ public class AuthService {
 
         } catch (AuthenticationException e) {
             log.error("Authentication error: {}", e.getMessage());
-            throw new RuntimeException("Invalid username or password");
+            throw new UserInvalidException(request.email());
         }
     }
 
