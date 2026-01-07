@@ -52,33 +52,29 @@ jobs:
       - name: Checkout du code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Important pour que Sonar puisse analyser l'historique git (blame)
+          fetch-depth: 0
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           java-version: 21
-          distribution: 'zulu'
+          distribution: 'temurin'
+          cache: 'maven'
 
-      # RÉCUPÉRATION DES ARTEFACTS
-      # On récupère le rapport Jacoco du job backend
       - name: Download Backend Coverage
         uses: actions/download-artifact@v4
         with:
           name: jacoco-report
           path: target/site/jacoco
 
-      # ANALYSE SONARCLOUD
-      # Note: On recompile rapidement le back pour avoir les .class (binaries)
-      # sinon Sonar risque de se plaindre que l'analyse Java est incomplète.
-      # On utilise -DskipTests car les tests ont déjà été faits avant.
-      - name: Build classes for Sonar
-        run: mvn clean compile -DskipTests
-        env:
-          MAVEN_OPTS: -Xmx2048m
-
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+      - name: Build and Analyze with Maven
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          mvn -B package sonar:sonar \
+            -DskipTests \
+            -Dsonar.projectKey=EdouardPlantevin_back_resto \
+            -Dsonar.organization=edouardplantevin \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
