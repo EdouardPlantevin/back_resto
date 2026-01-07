@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @Tag(name = "Rating")
 @RestController
 @RequestMapping("/api/rating")
@@ -26,8 +28,8 @@ public class RatingController {
 
     @PostMapping("/create")
     @Operation(security = {@SecurityRequirement(name = "bearerAuth")})
-    public void create(@Valid @RequestBody RatingRequest ratingRequest) {
-        ratingService.create(ratingRequest);
+    public void create(@Valid @RequestBody List<RatingRequest> ratingRequests) {
+        ratingService.createOrUpdate(ratingRequests);
     }
 
 }

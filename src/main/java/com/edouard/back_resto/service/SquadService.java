@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -101,13 +103,15 @@ public class SquadService {
                 throw new RuntimeException("User is not the leader of this squad");
             }
 
-            for (User u : squad.getUsers()) {
+            // Créer une copie de la liste pour éviter ConcurrentModificationException
+            Set<User> usersToRemove = new HashSet<>(squad.getUsers());
+            for (User u : usersToRemove) {
                 u.removeSquad(squad);
             }
 
             squadRepository.delete(squad);
         } catch (RuntimeException e) {
-            throw new RuntimeException("Error deleting squad: " + e.getMessage());
+            throw new RuntimeException("Error deleting squad: " + (e.getMessage() != null ? e.getMessage() : "Unknown error"));
         }
     }
 
