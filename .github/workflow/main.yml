@@ -1,3 +1,5 @@
+name: CI/CD Back Resto
+
 on:
   push:
     branches: [ "main" ]
