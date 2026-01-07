@@ -1,7 +1,6 @@
 package com.edouard.back_resto.controller;
 
 import com.edouard.back_resto.model.request.SquadRequest;
-import com.edouard.back_resto.model.response.MessageResponse;
 import com.edouard.back_resto.service.SquadService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;

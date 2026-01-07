@@ -28,7 +28,11 @@ jobs:
           cache: 'maven' # On met en cache les dépendances
 
       - name: Build and Test with Maven
-        run: mvn clean verify
+        run: mvn clean test jacoco:report
+        env:
+          SPRING_PROFILES_ACTIVE: test
+          MAVEN_OPTS: -Xmx2048m -Djdk.attach.allowAttachSelf=true
+        continue-on-error: false
 
       - name: Upload Jacoco Coverage Report
         uses: actions/upload-artifact@v4
@@ -62,17 +66,16 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: jacoco-report
-          path: back/target/site/jacoco
-
+          path: target/site/jacoco
 
       # ANALYSE SONARCLOUD
       # Note: On recompile rapidement le back pour avoir les .class (binaries)
       # sinon Sonar risque de se plaindre que l'analyse Java est incomplète.
       # On utilise -DskipTests car les tests ont déjà été faits avant.
       - name: Build classes for Sonar
-        run: |
-          cd back
-          mvn clean compile -DskipTests
+        run: mvn clean compile -DskipTests
+        env:
+          MAVEN_OPTS: -Xmx2048m
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
