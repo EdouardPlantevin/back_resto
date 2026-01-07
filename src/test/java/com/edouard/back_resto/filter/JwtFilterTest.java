@@ -25,7 +25,6 @@ import java.util.Base64;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -250,7 +249,7 @@ class JwtFilterTest {
 
     @Test
     @DisplayName("doFilterInternal - Devrait gérer les exceptions lors de l'extraction de l'email")
-    void doFilterInternal_ShouldHandleExceptionWhenExtractingEmail() throws ServletException, IOException {
+    void doFilterInternal_ShouldHandleExceptionWhenExtractingEmail() {
         // Given
         String invalidToken = "invalid.token";
         when(request.getHeader("Authorization")).thenReturn("Bearer " + invalidToken);
