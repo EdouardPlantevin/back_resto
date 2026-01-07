@@ -1,6 +1,5 @@
 package com.edouard.back_resto.controller;
 
-import com.edouard.back_resto.entity.Restaurant;
 import com.edouard.back_resto.model.dto.RestaurantDto;
 import com.edouard.back_resto.model.request.RestaurantRequest;
 import com.edouard.back_resto.service.RestaurantService;

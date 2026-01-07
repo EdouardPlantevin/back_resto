@@ -3,6 +3,8 @@ package com.edouard.back_resto.service;
 import com.edouard.back_resto.entity.Restaurant;
 import com.edouard.back_resto.entity.Squad;
 import com.edouard.back_resto.entity.User;
+import com.edouard.back_resto.exception.RestaurantAlreadyExistException;
+import com.edouard.back_resto.exception.UserUnauthorizeException;
 import com.edouard.back_resto.mapper.RestaurantMapper;
 import com.edouard.back_resto.model.dto.RestaurantDto;
 import com.edouard.back_resto.model.request.RestaurantRequest;
@@ -41,22 +43,18 @@ public class RestaurantService {
         Squad squad = squadRepository.findById(restaurantRequest.squadId()).orElseThrow(() -> new RuntimeException("Squad not found"));
 
         if (restaurantRepository.findByNameAndSquad(restaurantRequest.name(), squad).isPresent()) {
-            throw new RuntimeException("Restaurant already exists");
+            throw new RestaurantAlreadyExistException(restaurantRequest.name());
         }
 
-        try {
-            Restaurant restaurant = new Restaurant();
-            restaurant.setCreatedAt(new Date());
-            restaurant.setName(restaurantRequest.name());
-            restaurant.setAddress(restaurantRequest.address());
-            restaurant.setDescription(restaurantRequest.description());
-            restaurant.setPhone(restaurantRequest.phone());
-            restaurant.setSquad(squad);
+        Restaurant restaurant = new Restaurant();
+        restaurant.setCreatedAt(new Date());
+        restaurant.setName(restaurantRequest.name());
+        restaurant.setAddress(restaurantRequest.address());
+        restaurant.setDescription(restaurantRequest.description());
+        restaurant.setPhone(restaurantRequest.phone());
+        restaurant.setSquad(squad);
 
-            restaurantRepository.save(restaurant);
-        } catch (Exception e) {
-            throw new RuntimeException("Error creating restaurant: " + e.getMessage());
-        }
+        restaurantRepository.save(restaurant);
     }
 
     public void delete(Long restaurantId) {
@@ -68,14 +66,10 @@ public class RestaurantService {
         Squad squad = restaurant.getSquad();
 
         if (!squad.getUsers().contains(user)) {
-            throw new RuntimeException("User is not in this squad");
+            throw new UserUnauthorizeException("Supprimer ce restaurant");
         }
 
-        try {
-            restaurantRepository.delete(restaurant);
-        } catch (Exception e) {
-            throw new RuntimeException("Error deleting restaurant: " + e.getMessage());
-        }
+        restaurantRepository.delete(restaurant);
     }
 
 }

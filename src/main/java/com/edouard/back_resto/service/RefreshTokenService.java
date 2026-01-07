@@ -3,8 +3,10 @@ package com.edouard.back_resto.service;
 import com.edouard.back_resto.configuration.JwtUtils;
 import com.edouard.back_resto.entity.RefreshToken;
 import com.edouard.back_resto.entity.User;
+import com.edouard.back_resto.exception.RefreshTokenInvalidException;
 import com.edouard.back_resto.repository.RefreshTokenRepository;
 import com.edouard.back_resto.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -59,16 +61,16 @@ public class RefreshTokenService {
     @Transactional
     public void verifyRefreshToken(String token) {
         RefreshToken refreshToken = refreshTokenRepository.findByToken(token)
-                .orElseThrow(() -> new RuntimeException("Refresh token not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Refresh token not found"));
 
         if (!refreshToken.isValid()) {
             refreshTokenRepository.delete(refreshToken);
-            throw new RuntimeException("Refresh token is expired or revoked");
+            throw new RefreshTokenInvalidException();
         }
 
         if (!jwtUtils.validateToken(token) || !jwtUtils.isRefreshToken(token)) {
             refreshTokenRepository.delete(refreshToken);
-            throw new RuntimeException("Invalid refresh token");
+            throw new RefreshTokenInvalidException();
         }
     }
 

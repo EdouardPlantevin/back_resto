@@ -178,7 +178,7 @@ class RestaurantServiceTest {
         RuntimeException exception = assertThrows(RuntimeException.class, 
             () -> restaurantService.create(restaurantRequest));
         
-        assertEquals("Restaurant already exists", exception.getMessage());
+        assertEquals("Restaurant already exists : Test Restaurant", exception.getMessage());
         verify(restaurantRepository, never()).save(any(Restaurant.class));
     }
 
@@ -234,7 +234,7 @@ class RestaurantServiceTest {
         RuntimeException exception = assertThrows(RuntimeException.class, 
             () -> restaurantService.delete(restaurantId));
         
-        assertEquals("User is not in this squad", exception.getMessage());
+        assertEquals("L'utilisateur n'est pas autorisé à effectuer cette action : Supprimer ce restaurant", exception.getMessage());
         verify(restaurantRepository, never()).delete(any(Restaurant.class));
     }
 }

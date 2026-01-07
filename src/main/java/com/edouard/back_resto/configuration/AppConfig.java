@@ -9,6 +9,7 @@ import org.springframework.core.io.FileSystemResource;
 import java.io.File;
 
 @Configuration
+@SuppressWarnings("java:S1118") //Supress erreur de sonar
 public class AppConfig {
 
     @Bean

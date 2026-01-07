@@ -42,12 +42,12 @@ public class JwtUtils {
         return createToken(claims, email, refreshTokenExpiration);
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
+    public boolean validateToken(String token, UserDetails userDetails) {
         String email = extractEmail(token);
         return userDetails.getUsername().equals(email) && !isTokenExpired(token);
     }
 
-    public Boolean validateToken(String token) {
+    public boolean validateToken(String token) {
         return !isTokenExpired(token);
     }
 
