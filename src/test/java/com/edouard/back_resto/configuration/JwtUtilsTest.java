@@ -1,7 +1,5 @@
 package com.edouard.back_resto.configuration;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.security.SignatureException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +13,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.util.Base64;
 import java.util.Collections;
 
+import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -179,11 +178,8 @@ class JwtUtilsTest {
     @DisplayName("validateToken - Devrait échouer pour un token expiré")
     void validateToken_ShouldFailForExpiredToken() throws InterruptedException {
         // Given - Créer un token avec une expiration très courte
-        ReflectionTestUtils.setField(jwtUtils, "accessTokenExpiration", 1L); // 1 seconde
+        ReflectionTestUtils.setField(jwtUtils, "accessTokenExpiration", -1000L); // 1 seconde
         String token = jwtUtils.generateAccessToken(testEmail);
-        
-        // Attendre que le token expire
-        Thread.sleep(2000);
 
         // When & Then - Le token expiré doit lever une exception lors de la validation
         assertThrows(Exception.class, () -> jwtUtils.validateToken(token));
